@@ -1,18 +1,24 @@
 <template>
   <div class="page" :style="pageStyles">
     <template v-for="(data, key) in document.components">
-      <Paragraph :data="data" :key="data.id" v-if="data.type === 'paragraph'" />
+      <CsParagraph :data="data" :key="data.id" v-if="data.type === 'paragraph'" />
+      <CsFragment :data="data" :key="data.id" v-else-if="data.type === 'fragment'" />
+      <CsImage :data="data" :key="data.id" v-else-if="data.type === 'image'" />
     </template>
   </div>
 </template>
 
 <script>
-import Paragraph from './CS_Paragraph.vue';
+import CsParagraph from './CS_Paragraph.vue';
+import CsFragment from './CS_Fragment.vue';
+import CsImage from './CS_Image.vue';
 
 export default {
   name: 'CsPage',
   components: {
-    Paragraph,
+    CsParagraph,
+    CsFragment,
+    CsImage
   },
   props: {
     data: Object
@@ -24,12 +30,12 @@ export default {
   },
   computed: {
     pageStyles() {
-      const { paddings, pageMeasures } = this.document
+      const { paddingsPx, pageMeasures } = this.document
       const { width, height } = pageMeasures
       return {
         'width': `${width}px`,
-        'height': `${height}px`,
-        'padding': paddings.map(el => `${el}px`).join(' ')
+        'min-height': `${height}px`,
+        'padding': paddingsPx.map(el => `${el}px`).join(' ')
       }
     }
   }

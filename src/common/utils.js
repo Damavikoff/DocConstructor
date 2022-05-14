@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 const getPixelRatio = () => window.devicePixelRatio
 const fromCmToPx = (cm) => Math.round(cm * 96 / 2.54)
-const fromPxToCm = (px) => px * 2.54 / 96
+const fromPxToCm = (px) => Math.round(px * 2.54 * 100 / 96) / 100
 const fromPtToPx = (pt) => Math.round(4 * pt / 3)
 const fromPxToPt = (px) => 3 * px / 4
 

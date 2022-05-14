@@ -247,6 +247,13 @@ div, button, main, aside, header {
 	.item.active {
 		font-weight: 600 !important;
 	}
+	&.secondary {
+		>.item {
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
 }
 
 .label {
@@ -456,6 +463,9 @@ table {
 }
 
 i {
+	&.fitted {
+		margin: 0;
+	}
 	&.link {
 		&.radiant {
 			position: relative;

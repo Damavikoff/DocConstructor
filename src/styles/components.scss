@@ -1,0 +1,20 @@
+.menu {
+  display: flex;
+  padding: .5em 0;
+  align-items: center;
+  >.item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 .5em;
+    >i + i {
+      margin-left: .5em;
+    }
+    +.item {
+      border-left: 1px solid var(--border_color_1);
+    }
+    &.fluid {
+      flex-grow: 1;
+    }
+  }
+}
