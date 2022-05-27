@@ -7,7 +7,10 @@ export default class Document extends Component {
     super()
     this.paddings = [1, 1, 1, 1]
     this.format = formats.a4
+    this.title = 'Документ'
+    this.description = 'Описание документа'
     this.width = fromCmToPx(formats.a4.width)
+    this.rules = []
     Object.assign(this, data)
   }
 
@@ -17,5 +20,14 @@ export default class Document extends Component {
       width: fromCmToPx(width),
       height: fromCmToPx(height)
     }
+  }
+
+  getIdentifiers(component) {
+    const result = [component.id]
+    return result.concat(component.components.map(el => this.getIdentifiers(el)))
+  }
+
+  get identifiers() {
+    return getComponents(this)
   }
 }

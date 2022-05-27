@@ -125,6 +125,12 @@ div, button, main, aside, header {
 		flex-grow: 1 !important;
 	}
 	&.relaxed:not(.vertical) {
+		&.slightly {
+			>* {
+				margin-left: .25em;
+				margin-right: .25em;
+			}
+		}
 		>* {
 			margin-left: .5em;
 			margin-right: .5em;
@@ -224,11 +230,13 @@ div, button, main, aside, header {
 			border-color: #fbbd08;
 		}
 	}
-	>.item.active {
-		background: rgb(255 227 115);
-		border-color: rgb(255 227 115);
-		&:hover {
-			background: rgb(250 222 110);
+	&.lightyellow {
+		.item.active {
+			background: rgb(255 227 115);
+			border-color: rgb(255 227 115);
+			&:hover {
+				background: rgb(250 222 110);
+			}
 		}
 	}
 	&.vertical {
@@ -518,12 +526,16 @@ i {
 	}
 }
 
-.link.text {
+span.link.text {
 	white-space: nowrap;
+	user-select: none;
 	cursor: pointer;
 	opacity: .8;
 	border-bottom: 1px solid transparent;
 	padding-bottom: 1px;
+	&.basic {
+		border: none;
+	}
 	&:hover {
 		opacity: 1;
 		&:not(.basic) {
@@ -532,7 +544,10 @@ i {
 	}
 	> i {
 		font-weight: 700;
-		margin-right: 0;
+		margin-right: .5em;
+	}
+	&.disabled {
+		pointer-events: none;
 	}
 }
 
@@ -619,7 +634,12 @@ i, .ui.text {
 	}
 
 	&.lightyellow {
-		color: #ffe373;
+		&.bordered {
+			background-color: #ffe373;
+		}
+		&:not(.bordered) {
+			color: #ffe373;
+		}
 	}
 }
 

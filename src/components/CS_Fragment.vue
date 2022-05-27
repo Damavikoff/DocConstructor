@@ -9,10 +9,12 @@
       </div>
     </div>
     <div class="content">
-      <template v-for="(data, key) in data.components">
-        <CsParagraph :data="data" :key="data.id" v-if="data.type === 'paragraph'" />
-        <CsFragment :data="data" :key="data.id" v-else-if="data.type === 'fragment'" />
-        <CsImage :data="data" :key="data.id" v-else-if="data.type === 'image'" />
+      <template v-for="(item, key) in data.components">
+        <CsParagraph :data="item" :key="item.id" v-if="item.type === 'paragraph'" />
+        <CsFragment :data="item" :key="item.id" v-else-if="item.type === 'fragment'" />
+        <CsImage :data="item" :key="item.id" v-else-if="item.type === 'image'" />
+        <CsTable :data="item" :key="item.id" v-else-if="item.type === 'table'" />
+        <CsList :data="item" :key="item.id" v-else-if="item.type === 'list'" />
       </template>
     </div>
   </div>
@@ -21,12 +23,14 @@
 <script>
 import CsParagraph from './CS_Paragraph.vue';
 import CsImage from './CS_Image.vue';
+import CsList from './CS_List.vue';
 
 export default {
   name: 'CsFragment',
   components: {
     CsParagraph,
-    CsImage
+    CsImage,
+    CsList
   },
   props: {
     data: Object
@@ -79,10 +83,20 @@ export default {
       .control {
         display: block;
       }
-      box-shadow: inset 0 0 0 1px #cacaca;
+      >.content {
+        border-color: #cacaca;
+      }
     }
     &.active {
-      box-shadow: inset 0 0 0 1px #2185d0;
+      >.content {
+        border-color: #2185d0;
+      }
+    }
+    .content {
+      border: 1px solid transparent;
+      box-shadow: inset 0 0 0 1px #eaeaea;
+      padding: 1px;
+      overflow-x: clip;
     }
   }
 </style>

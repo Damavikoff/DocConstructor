@@ -10,11 +10,19 @@
     >i + i {
       margin-left: .5em;
     }
-    +.item {
-      border-left: 1px solid var(--border_color_1);
-    }
     &.fluid {
       flex-grow: 1;
+    }
+    &.disabled {
+      opacity: .5;
+      pointer-events: none;
+    }
+  }
+  &:not(.borderless) {
+    >.item {
+      +.item {
+        border-left: 1px solid var(--border_color_1);
+      }
     }
   }
 }

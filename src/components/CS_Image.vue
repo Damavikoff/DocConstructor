@@ -5,7 +5,7 @@
         <i class="trash alternate outline icon"></i>
       </div>
     </div>
-    <div class="content" @click="setActiveNode(data)">
+    <div class="content" @click="setActiveNode(data)" :style="contentStyles">
       <img :src="data.imageData" alt="image_data" />
     </div>
   </div>
@@ -19,6 +19,25 @@ export default {
     data: Object
   },
   inject: ['getActiveNode', 'setActiveNode'],
+  watch: {
+    'data.preserveScale'(newVal) {
+      if (newVal) {
+        const { width, height, nativeWidth, nativeHeight } = this.data
+        const maxValue = Math.max(width, height)
+        const ratio = nativeWidth / nativeHeight
+        if (!maxValue) {
+          this.data.width = nativeWidth
+          this.data.height = nativeHeight
+          return
+        }
+        if (width > height) {
+          this.data.height = maxValue * ratio
+        } else {
+          this.data.width = maxValue / ratio
+        }
+      }
+    }
+  },
   computed: {
     isActive() {
       return this.data === this.getActiveNode()
@@ -33,6 +52,12 @@ export default {
       return {
         'padding': paddingsPx.map(el => `${el}px`).join(' ')
       }
+    },
+    contentStyles() {
+      return {
+        width: `${this.data.width}px`,
+        height: `${this.data.height}px`
+      }
     }
   },
   methods: {
@@ -46,9 +71,10 @@ export default {
 
 <style lang="scss" scoped>
   .image {
+    overflow: hidden;
     &.active {
       .content {
-        box-shadow: 0 0 0 1px #2185d0;
+        border-color: #2185d0;
       }
     }
     &:hover {
@@ -75,6 +101,11 @@ export default {
     .content {
       display: flex;
       width: fit-content;
+      border: 1px solid transparent;
+      >img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 </style>

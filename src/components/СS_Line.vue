@@ -69,19 +69,23 @@ export default {
       if (type === 'indent' && !this.isIndentable) return
       const { pageX } = e
       const diff = fromPxToCm(pageX - startPos)
-      if (fromPxToCm(this.innerWidth) <= 2) return
+      const innerCm = fromPxToCm(this.innerWidth)
+      if (innerCm <= 2 && ( type === 'left' && diff > 0 || type === 'right' && diff < 0 )) return
       if (Math.abs(diff) >= 0.25) {
         this.resize.startPos = pageX
-        const { paddings, indent } = this.activeNode
+        const { paddings, indent, relativePos } = this.activeNode
+        const relativeLeft = fromPxToCm(relativePos.left) + paddings[3]
         switch (type) {
           case 'left':
             this.activeNode.paddings[3] = Math.max(paddings[3] + 0.25 * Math.sign(diff), 0)
             break;
           case 'right':
+            if (this.activeNode.type === 'image') return
             this.activeNode.paddings[1] = Math.max(paddings[1] + 0.25 * Math.sign(diff) * -1, 0)
             break;
           case 'indent':
-            this.activeNode.indent = Math.max(indent + 0.25 * Math.sign(diff), 0)
+            if (innerCm <= 1.5 && Math.sign(diff) > 0) return
+            this.activeNode.indent = Math.max(indent + 0.25 * Math.sign(diff), -relativeLeft)
             break;
         }
       }
@@ -89,10 +93,11 @@ export default {
   },
   computed: {
     isIndentable() {
-      return this.activeNode.type === 'paragraph'
+      return ['paragraph', 'listItem'].includes(this.activeNode.type)
     },
     activeNode() {
-      return this.getActiveNode() ?? this.document
+      const node = this.getActiveNode() ?? this.document
+      return node.type !== 'field' ? node : node.parent
     },
     cmS() {
       return Math.ceil(this.format.width)
@@ -109,6 +114,7 @@ export default {
     },
     padStyles() {
       const { paddingsPx:paddings, relativePos } = this.activeNode
+      
       return {
         left: {
           width: `${relativePos.left + paddings[3]}px`
@@ -120,8 +126,9 @@ export default {
     },
     indentStyles() {
       const { indentPx } = this.activeNode
+      const indent = (indentPx ?? 0) * -1
       return {
-        right: `-${indentPx ?? 0}px`
+        right: `${indent}px`
       }
     }
   }

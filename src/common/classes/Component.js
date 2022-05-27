@@ -12,6 +12,10 @@ export default class Component {
     this.rules = []
   }
 
+  remove() {
+    this.parent.components = this.parent.components.filter(el => el !== this)
+  }
+
   setMeasures(width, height) {
     this.width = width
     this.height = height
@@ -20,14 +24,12 @@ export default class Component {
   get relativePos() {
     let left = 0
     let right = 0
-    let parent = this.parent
-    while (parent) {
-      const { paddingsPx } = parent
-      left += paddingsPx[3]
-      right += paddingsPx[1]
-      parent = parent.parent
+    if (this.parent) {
+      const { relativePos, paddingsPx } = this.parent
+      left = relativePos.left + paddingsPx[3]
+      right = relativePos.right + paddingsPx[1]
     }
-
+    
     return {
       left,
       right
@@ -59,7 +61,32 @@ export default class Component {
     }
   }
 
+  get index() {
+    if (this.parent) return this.parent.components.indexOf(this)
+    return 0
+  }
+
   get paddingsPx() {
     return this.paddings.map(el => fromCmToPx(el))
+  }
+
+  getClosetParentElement(type) {
+    let parent = this.parent
+    while (parent) {
+      if (parent.type === 'tableCell') return parent
+      parent = parent.parent
+    }
+  }
+
+  get closestTable() {
+    return this.getClosetParentElement('table')
+  }
+
+  get closestTableCell() {
+    return this.getClosetParentElement('tableCell')
+  }
+
+  get closestFragment() {
+    return this.getClosetParentElement('fragment')
   }
 }

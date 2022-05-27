@@ -4,7 +4,9 @@ export default class Image extends Component {
   constructor(data) {
     super(data)
     this.type = 'image'
-    this.imageData = null,
+    this.imageData = null
+    this.nativeWidth = 0
+    this.nativeHeight = 0
     this.preserveScale = true
     Object.assign(this, data)
   }
